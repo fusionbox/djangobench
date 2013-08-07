@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-Run us some Django benchmarks.
+Run us some Widgy benchmarks.
 """
 
 import subprocess
@@ -9,7 +9,7 @@ import argparse
 import email
 import simplejson
 import sys
-from djangobench import perf
+from widgybench import perf
 from unipath import DIRS, FSPath as Path
 
 __version__ = '0.10'
@@ -28,11 +28,11 @@ def run_benchmarks(control, experiment, benchmark_dir, benchmarks, trials, vcs=N
             raise ValueError('Recording directory "%s" does not exist' % record_dir)
         print "Recording data to '%s'" % record_dir
 
-    control_label = get_django_version(control, vcs=vcs)
-    experiment_label = get_django_version(experiment, vcs=vcs)
+    control_label = get_widgy_version(control, vcs=vcs)
+    experiment_label = get_widgy_version(experiment, vcs=vcs)
     branch_info = "%s branch " % vcs if vcs else ""
-    print "Control: Django %s (in %s%s)" % (control_label, branch_info, control)
-    print "Experiment: Django %s (in %s%s)" % (experiment_label, branch_info, experiment)
+    print "Control: Widgy %s (in %s%s)" % (control_label, branch_info, control)
+    print "Experiment: Widgy %s (in %s%s)" % (experiment_label, branch_info, experiment)
     print
 
     # Calculate the subshell envs that we'll use to execute the
@@ -215,14 +215,14 @@ def format_benchmark_result(result, num_points):
     else:
         return str(result)
 
-def get_django_version(loc, vcs=None):
+def get_widgy_version(loc, vcs=None):
     if vcs:
         switch_to_branch(vcs, loc, do_cleanup=True)
         pythonpath = Path.cwd()
     else:
         pythonpath = Path(loc).absolute()
     out, err, _ = perf.CallAndCaptureOutput(
-        [sys.executable, '-c' 'import django; print django.get_version()'],
+        [sys.executable, '-c' 'import widgy; print widgy.get_version()'],
         env = {'PYTHONPATH': pythonpath}
     )
     return out.strip()
@@ -250,14 +250,14 @@ def main():
     parser.add_argument(
         '--control',
         metavar = 'PATH',
-        default = 'django-control',
-        help = "Path to the Django code tree to use as control."
+        default = 'widgy-control',
+        help = "Path to the Widgy code tree to use as control."
     )
     parser.add_argument(
         '--experiment',
         metavar = 'PATH',
-        default = 'django-experiment',
-        help = "Path to the Django version to use as experiment."
+        default = 'widgy-experiment',
+        help = "Path to the Widgy version to use as experiment."
     )
     parser.add_argument(
         '--vcs',
@@ -284,7 +284,7 @@ def main():
         metavar = 'PATH',
         default = DEFAULT_BENCHMARK_DIR,
         help = ('Directory to inspect for benchmarks. Defaults to the '
-                'benchmarks included with djangobench.'),
+                'benchmarks included with widgybench.'),
     )
     parser.add_argument(
         'benchmarks',
