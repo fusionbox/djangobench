@@ -44,3 +44,5 @@ SITE_ID = 1
 
 WIDGY_MEZZANINE_SITE = 'widgybench.site'
 URLCONF_INCLUDE_CHOICES = []
+
+ROOT_URLCONF = 'widgybench.urls'
