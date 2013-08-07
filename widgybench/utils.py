@@ -55,7 +55,7 @@ def run_benchmark(benchmark, syncdb=True, setup=None, trials=None, handle_argv=T
 
     if syncdb:
         from django.core.management import call_command
-        call_command("syncdb", verbosity=0)
+        call_command("syncdb", verbosity=0, interactive=False)
 
     if setup:
         setup()
